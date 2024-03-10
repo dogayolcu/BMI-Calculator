@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI Calculator</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #CCB1F3; /* Replace with your desired color */
+        }
+
+        /* Center the input fields */
+        form {
+            text-align: center;
+        }
+
+        form label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        form input {
+            width: 200px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        form .gender {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        form .gender label {
+            margin: 0 5px;
+        }
+
+        form button {
+            margin-top: 10px;
+        }
+
+    </style>
+    <script>
+        function submitForm() {
+            // Get the form values
+            var firstName = document.getElementById("firstName").value;
+            var lastName = document.getElementById("lastName").value;
+            var dateOfBirth = document.getElementById("dateOfBirth").value;
+            var gender = document.querySelector('input[name="gender"]:checked').value;
+            var weight = parseFloat(document.getElementById("weight").value);
+            var height = parseFloat(document.getElementById("height").value);
+
+            // Create an object with the form data
+            var formData = {
+                firstName: firstName,
+                lastName: lastName,
+                dateOfBirth: dateOfBirth,
+                gender: gender,
+                weight: weight,
+                height: height
+            };
+
+            // Send the form data as JSON
+            fetch('/BMIPage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+                .then(response => response.json())
+                .catch(error => {
+                    // Handle errors
+                    console.error(error);
+                });
+        }
+    </script>
+</head>
+<body>
+<h1>BMI Calculator</h1>
+<form id="bmiForm" method="POST" action="/BMIPage" enctype="application/json">
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" name="firstName" required>
+    <br>
+    <label for="lastName">Last Name:</label>
+    <input type="text" id="lastName" name="lastName" required>
+    <br>
+    <label for="dateOfBirth">Date of Birth:</label>
+    <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+    <br>
+    <label for="gender">Gender:</label>
+    <input type="radio" id="male" name="gender" value="male" required>
+    <label for="male">Male</label>
+    <input type="radio" id="female" name="gender" value="female" required>
+    <label for="female">Female</label>
+    <br>
+    <label for="weight">Weight (kg):</label>
+    <input type="number" id="weight" name="weight" required>
+    <br>
+    <label for="height">Height (cm):</label>
+    <input type="number" id="height" name="height" required>
+    <br>
+    <button type="button" onclick="submitForm()">Calculate</button>
+</form>
+
+
+</body>
+</html>
